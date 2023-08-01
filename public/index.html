@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>SkillUp</title>
+</head>
+
+<body>
+    <nav class="bg-amber-400 border-gray-200 dark:bg-sky-500  text-white text-center">
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <a href="index.html" class="flex items-center">
+                <span class="self-center text-3xl font-semibold whitespace-nowrap dark:text-white">SkillUp</span>
+            </a>
+            <button data-collapse-toggle="navbar-default" type="button"
+                class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-stone-200 dark:focus:ring-gray-600"
+                aria-controls="navbar-default" aria-expanded="false">
+                <span class="sr-only">Open main menu</span>
+                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 17 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M1 1h15M1 7h15M1 13h15" />
+                </svg>
+            </button>
+            <div class="hidden w-full md:block md:w-auto" id="navbar-default">
+                <ul
+                    class="font-normal flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0  dark:bg-sky-500 md:dark:bg-sky-500 dark:border-sky-500 uppercase">
+                    <li>
+                        <a href="index.html"
+                            class="block py-2 pl-3 pr-4 mr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-amber-700 md:p-0 dark:text-white md:dark:hover:text-amber-400 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent visited:text-amber-400 ">Home</a>
+                    </li>
+                    <li>
+                        <a href="practice.html"
+                            class="block py-2 pl-3 pr-4 mr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-amber-700 md:p-0 dark:text-white md:dark:hover:text-amber-400 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ">Practice</a>
+                    </li>
+                    <li>
+                        <a href="index.html"
+                            class="block py-2 pl-3 pr-4 mr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-amber-700 md:p-0 dark:text-white md:dark:hover:text-amber-400 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ">Tips</a>
+                    </li>
+                    <li>
+                        <a href="index.html"
+                            class="block py-2 pl-3 pr-4 mr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-amber-700 md:p-0 dark:text-white md:dark:hover:text-amber-400 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ">Newsletter</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </nav>
+    <section class="container m-8 flex flex-col items-center justify-center">
+
+        <p class="text-slate-400 text-center font-normal p-4 mt-2 text-lg tracking-wide leading-relaxed">This
+            app will
+            help
+            you to
+            prepare and
+            feel
+            more
+            comfortable
+            for
+            both
+            behavioral and
+            technical interviews. You
+            can create questions with the respective answers, and simulate an interview with these questions using a
+            timer.</p>
+
+
+        <a href="create.html"
+            class="bg-amber-400 hover:bg-amber-500 text-white font-medium py-2 px-6 rounded-md mt-4 uppercase">Create
+            a
+            flashcard
+        </a>
+    </section>
+    <hr class="shadow-md drop-shadow-sm border-2">
+    <!-- Display cards -->
+    <div class="grid grid-cols-2 gap-4 h-screen" id="display-flashcards">
+        <div class="shadow-lg">
+            <h2 class="pt-8 mt-2 mb-3 text-center font-bold drop-shadow-lg text-sky-600 text-2xl">Behavioral Questions
+            </h2>
+            <!-- creating two columns, two cards per row-->
+            <div class="grid grid-cols-2 justify-items-center" id="behavioral-flashcards">
+                <!-- div to hold front and back card -->
+
+
+            </div>
+
+
+        </div>
+
+        <div>
+            <h2 class="pt-8 mt-2 mb-3 text-center font-bold drop-shadow-lg text-sky-600 text-2xl">Technical Questions
+            </h2>
+            <div class="grid grid-cols-2 justify-items-center" id="technical-flashcards">
+
+            </div>
+
+        </div>
+    </div>
+
+    <script src="../node_modules/axios/dist/axios.min.js"></script>
+    <script src="main.js"></script>
+
+</body>
+
+</html>
