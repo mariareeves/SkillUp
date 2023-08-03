@@ -108,5 +108,44 @@ module.exports = {
         `)
             .then(dbRes => res.sendStatus(200))
             .catch(err => console.log(err))
-    }
+    },
+    getOneCard: (req, res) => {
+        const { id } = req.params
+        sequelize.query(`
+            select * from flashcards
+            where flashcard_id = ${id};
+        `)
+            .then(dbRes => {
+                res.status(200).send(dbRes[0]);
+            })
+            .catch(err => {
+                console.error(err);
+                res.status(500).send("Failed to  getOne card the flashcard.");
+            });
+    },
+    favoriteCard: (req, res) => {
+        let { favoriteCard } = req.body
+        console.log('inside favoriteCard', favoriteCard)
+        let { id } = req.params
+        console.log('req.body', id)
+        console.log('essa e a minha nova favoriteCard: ', favoriteCard);
+
+        sequelize.query(`
+            update flashcards set "favoriteCard"= ${favoriteCard}
+            where flashcard_id = ${id};
+        `)
+            .then(dbRes => res.sendStatus(200))
+            .catch(err => console.log('error updating favoriteCard', err))
+    },
+    getFavoriteCards: (req, res) => {
+        sequelize.query('select * from flashcards where "favoriteCard" = true;')
+            .then(dbRes => {
+                console.log('I am in the getFavoriteCards', dbRes[0])
+                res.status(200).send(dbRes[0])
+            })
+            .catch(err => {
+                console.log(err)
+                res.status(500).send(err)
+            })
+    },
 }

@@ -16,3 +16,15 @@
     align-items: center;
     font-size: 40px;
 }
+
+/* login google */
+#login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 34px;
+}
+
+#login img {
+    height: 30px;
+}

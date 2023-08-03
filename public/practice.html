@@ -52,27 +52,63 @@
     <header class="pt-8 my-4 text-center font-bold drop-shadow-lg text-sky-600 text-2xl uppercase">
         Practice Interview
     </header>
-    <hr class="shadow-md drop-shadow-md border-2 mt-6">
-    <div class="flex items-center justify-center mt-10">
-        <!-- Slider main container -->
-        <div class="swiper">
-            <!-- Additional required wrapper -->
-            <div class="swiper-wrapper">
-                <!-- Slides -->
-                <div class="swiper-slide">Tell me about yourself</div>
-                <div class="swiper-slide">why do you want to work for Perficient</div>
+    <section class="mx-auto w-full">
+        <hr class="shadow-md drop-shadow-md border-2 mt-6">
+        <div class="mt-4 flex ml-8 items-center">
+            <h2 class="font-bold  text-sky-600 text-xl">Timer:</h2>
+            <div id="clock" class="ml-4 flex items-center">
+                <form class="flex items-center">
+                    <input id="min" type="number" step="1" min="0" max="59" value="25"
+                        class="px-3 py-1 w-16 text-right text-base font-bold bg-transparent text-gray-600 focus:bg-black focus:bg-opacity-20"></input>
+                    <span class="text-4xl">:</span>
+                    <input id="sec" type="number" step="1" min="0" max="59" value="00"
+                        class="px-3 py-1 w-16 text-right text-base font-bold bg-transparent text-gray-600 focus:bg-black focus:bg-opacity-20"></input>
+                </form>
+                <div id="controls" class="ml-4 flex items-center">
+                    <button id="start"
+                        class="appearance-none text-base text-sky-500 border-2 mr-2 border-sky-500 rounded px-1.5 py-1 transition-colors duration-300 hover:bg-white hover:text-sky-700 focus:outline-none focus:bg-white focus:text-sky-700">
+                        START
+                    </button>
+                    <button id="reset"
+                        class="appearance-none text-base text-sky-500 border-2 border-sky-500 rounded px-1.5  py-1 transition-colors duration-300 hover:bg-white hover:text-sky-700 focus:outline-none focus:bg-white focus:text-sky-700">
+                        RESET
+                    </button>
+                </div>
             </div>
-            <!-- If we need pagination -->
-            <div class="swiper-pagination"></div>
-
-            <!-- If we need navigation buttons -->
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
-
-            <!-- If we need scrollbar -->
-            <div class="swiper-scrollbar"></div>
         </div>
-    </div>
+        <div class="flex items-center justify-center mt-10" id="display-cards">
+
+            <!-- <div class="swiper">
+             
+                <div class="swiper-wrapper">
+              
+                    <div class="swiper-slide" id="question-sound">Tell me about yourself</div>
+                    <div class="swiper-slide">why do you want to work for Perficient</div>
+                </div>
+      
+                <div class="swiper-pagination"></div>
+
+          
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+
+           
+                <div class="swiper-scrollbar"></div>
+            </div> -->
+        </div>
+        <div class="flex justify-center gap-4 mt-6">
+            <button id="soundBtn"
+                class="flex p-3 bg-sky-500 rounded-xl hover:rounded-3xl hover:bg-sky-600 transition-all duration-300 text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
+                </svg>
+
+            </button>
+        </div>
+    </section>
+
 
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>

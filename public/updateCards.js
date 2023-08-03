@@ -4,34 +4,40 @@ console.log('update js')
 const BASE_URL = 'http://localhost:4000'
 
 // POST flashcards
-// Create Form
-const formCards = document.getElementById('form-cards')
+const formUpdate = document.getElementById('form-update')
 const questionInput = document.getElementById('question')
 const textareaAnswer = document.getElementById('answer')
 const updatelBtn = document.getElementById('update')
 const cancelBtn = document.getElementById('cancel')
+// questionInput.value = 'test'
 
 
 // Function to get the flashcard ID from the URL query parameters
 function getFlashcardIdFromUrl() {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get("flashcardId");
+  const queryString = window.location.search
+  const urlParams = new URLSearchParams(queryString);
+  console.log('urlParams', urlParams)
+  console.log('id', urlParams.get('id'))
+  return urlParams.get('id');
 }
 
 // Function to retrieve the flashcard details from the backend based on the ID
 function getFlashcardDetails(flashcardId) {
-  return axios.get(`${BASE_URL}/api/flashcards/${flashcardId}`);
+  console.log('getFlashcardDetails: ', flashcardId)
+  return axios.get(`${BASE_URL}/api/flashcard/${flashcardId}`);
 }
 
 // Function to update the flashcards
-function updateCards(evt) {
+function updateCard(evt) {
   evt.preventDefault();
+  console.log('update')
 
   const flashcardId = getFlashcardIdFromUrl();
   if (!flashcardId) {
     console.error("Flashcard ID not found in URL query parameters.");
     return;
   }
+
 
   let body = {
     question: questionInput.value,
@@ -46,6 +52,7 @@ function updateCards(evt) {
     .then((res) => {
       alert('Flashcard updated successfully.');
       console.log('Update function front end', res);
+      window.location.href = "index.html"
       // Optionally, you can redirect the user back to the main page or do something else after the update.
       // For example: window.location.href = "main.html";
     })
@@ -55,10 +62,14 @@ function updateCards(evt) {
 // On page load, fetch the flashcard details based on the ID in the URL and populate the form with the existing data
 document.addEventListener('DOMContentLoaded', function () {
   const flashcardId = getFlashcardIdFromUrl();
+  console.log('linha 64', flashcardId)
   if (flashcardId) {
     getFlashcardDetails(flashcardId)
       .then((res) => {
-        const flashcard = res.data;
+        console.log('res.data', res.data)
+        const flashcard = res.data[0];
+        console.log('question', flashcard.question)
+        console.log('answer', flashcard.answer)
         questionInput.value = flashcard.question;
         textareaAnswer.value = flashcard.answer;
       })
@@ -68,5 +79,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 // form event listener 
-formCards.addEventListener('submit', updateCards)
+formUpdate.addEventListener('submit', updateCard)
 
+// cancel button 
+function cancel(evt) {
+  evt.preventDefault();
+  // Reset the values of the input fields to empty strings
+  questionInput.value = '';
+  textareaAnswer.value = '';
+}
+
+//cancel button listener
+cancelBtn.addEventListener('click', cancel)
