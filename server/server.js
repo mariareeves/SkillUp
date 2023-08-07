@@ -15,16 +15,23 @@ app.use(express.json())
 app.use(cors())
 app.use(express.static('public'))
 
+//require signup and login from userController.js
+const { signup, login } = require('./userController')
 
 //require modules from controller.js
 const { getCards, createCards, deleteCard, updateCard, getOneCard, favoriteCard, getFavoriteCards } = require('./controller.js');
+const { log } = require('console');
 
 
 
 // DEV
 // app.post('/api/seed', seed)
 
-// FLASHCARDS
+// AUTH endpoint
+app.post('/api/login', login)
+app.post('/api/signUp', signup)
+
+// FLASHCARDS endpoints
 app.get('/api/flashcards', getCards)
 app.get('/api/flashcard/:id', getOneCard)
 app.get('/api/favorites/', getFavoriteCards)

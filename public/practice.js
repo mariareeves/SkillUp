@@ -71,7 +71,29 @@ function reset() {
 
 // *----------------*-------------* //
 
-startButton.addEventListener('click', displayCards)
+//web speech api 
+let voices = []
+
+synth.onvoiceschanged = function () {
+    voices = synth.getVoices()
+    console.log('Voices', voices)
+}
+
+function speakCard(text) {
+    const utterThis = new SpeechSynthesisUtterance(text);
+    const voices = synth.getVoices(); // Get the available voices
+    if (voices.length > 0) {
+        const voice = voices[0];
+        utterThis.voice = voice;
+        utterThis.pitch = 1;
+        utterThis.rate = 0.8;
+        synth.speak(utterThis);
+    } else {
+        console.log('Speech synthesis not available or no voices found.');
+    }
+}
+
+// startButton.addEventListener('click', displayCards)
 
 async function displayCards() {
     const contentDiv = document.getElementById('display-cards')
@@ -85,6 +107,7 @@ async function displayCards() {
     <div class="swiper-button-next"></div>
     <div class="swiper-scrollbar"></div>
     </div>
+
     `
     try {
         const res = await axios.get(`${BASE_URL}/api/favorites`);
@@ -93,10 +116,15 @@ async function displayCards() {
         res.data.forEach(card => {
             console.log('card in displayCard', card);
             const slide = document.createElement('div'); // Create a new swiper slide
+            const questionId = `question-${card.flashcard_id}` // to give each card unique id
+            slide.setAttribute('id', questionId)
             slide.classList.add('swiper-slide', 'px-4');
             slide.textContent = card.question; // Set the card content as the question
 
+
             addCards.appendChild(slide); // Append the new slide to the add-cards container
+
+
         });
 
         // Now that all slides are added, initialize the swiper
@@ -123,39 +151,34 @@ async function displayCards() {
         console.error('Error fetching flashcards:', error);
     };
 
-    // *----------------*-------------* //
-    //web speech api 
-    let voices = []
 
-    synth.onvoiceschanged = function () {
-        voices = synth.getVoices()
-        console.log('Voices', voices)
-    }
 
-    function speakCard(text) {
-        const utterThis = new SpeechSynthesisUtterance(text);
-        if (voices.length > 0) {
-            const voice = voices[0];
-            console.log('voice', voice);
-            utterThis.voice = voice;
-            utterThis.pitch = 1;
-            utterThis.rate = 0.8;
-            synth.speak(utterThis);
-            console.log('utterThis', utterThis);
-        } else {
-            console.log('it didnt work');
-        }
-    }
+    // Attach event listener to the sound button
     const soundBtn = document.getElementById('soundBtn');
-    const question = document.getElementById('question');
-
-
     soundBtn.addEventListener('click', function () {
-        speakCard(question.textContent); // Pass the text content of the question div
+        // Get all the swiper slides
+        const slides = document.querySelectorAll('.swiper-slide-active');
+        console.log(slides)
+        // Loop through each slide and read its text content
+
+        speakCard(slides[0].textContent);
+
     });
+
+    // // Attach event listener to the sound button
+    // const soundBtn = document.getElementById('soundBtn');
+    // soundBtn.addEventListener('click', function () {
+    //     // Wait for 3 minutes before speaking
+    //     setTimeout(function () {
+    //         // Get all the swiper slides
+    //         const slides = document.querySelectorAll('.swiper-slide');
+    //         // Loop through each slide and read its text content
+    //         slides.forEach((slide) => {
+    //             speakCard(slide.textContent);
+    //         });
+    //     }, 3 * 60 * 1000); // 3 minutes in milliseconds
+    // });
+
 }
 
-
-
-
-
+displayCards()

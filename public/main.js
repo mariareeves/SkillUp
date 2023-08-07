@@ -4,6 +4,31 @@ const BASE_URL = 'http://localhost:4000'
 
 // *----------------*-------------* //
 
+// Sign up / Login form button toggle
+function toggleModal(modalId) {
+  const modal = document.getElementById(modalId);
+  modal.classList.toggle('hidden'); // Toggle the 'hidden' class
+
+  // Add event listener to the close button
+  const closeButton = document.getElementById('modal-close-btn');
+  closeButton.addEventListener('click', function () {
+    modal.classList.add('hidden'); // Hide the modal when the close button is clicked
+  });
+}
+
+function showLoginForm() {
+  document.getElementById('login-form').classList.remove('hidden');
+  document.getElementById('create-account-form').classList.add('hidden');
+}
+
+function showCreateAccountForm() {
+  document.getElementById('login-form').classList.add('hidden');
+  document.getElementById('create-account-form').classList.remove('hidden');
+}
+
+
+// *----------------*-------------* //
+
 // GET flashcards
 const behavioralList = document.getElementById('behavioral-flashcards')
 const technicalList = document.getElementById('technical-flashcards')
