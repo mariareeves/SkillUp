@@ -2,6 +2,46 @@ console.log('test mainjs')
 //Base url 
 const BASE_URL = 'http://localhost:4000'
 
+
+
+// *----------------*-------------* //
+// //display quotes 
+const displayQuotes = document.getElementById('display-quotes')
+function displayQuote(quote) {
+
+  displayQuotes.innerHTML = `"${quote}"`
+}
+let randomQuoteIntervalId = null; // Declare a variable to store the interval ID
+
+function getRandomQuote() {
+  axios.get(`${BASE_URL}/api/random-quote?_=${Date.now()}`)
+    .then((res) => {
+      const randomQuote = res.data
+      console.log('line 150', randomQuote)
+      displayQuote(randomQuote)
+    })
+    .catch(err => console.log(err))
+}
+// Function to fetch and display a random quote at a specified interval
+function displayRandomQuotesInterval(interval) {
+  getRandomQuote(); // Display the first quote immediately
+
+  randomQuoteIntervalId = setInterval(() => {
+    getRandomQuote();
+  }, interval);
+}
+
+// Function to stop displaying random quotes
+function stopDisplayingRandomQuotes() {
+  if (randomQuoteIntervalId !== null) {
+    clearInterval(randomQuoteIntervalId);
+    randomQuoteIntervalId = null;
+  }
+}
+
+const INTERVAL_TIME = 5000; // 5 seconds (adjust the time interval as desired)
+displayRandomQuotesInterval(INTERVAL_TIME);
+
 // *----------------*-------------* //
 
 // Sign up / Login form button toggle
@@ -41,13 +81,32 @@ function showLoginButton() {
 }
 
 
-// Check if the user is signed in and show the appropriate button
-// if (isUserSignedIn()) {
-//   showLogoutButton();
-// } else {
-//   showLoginButton();
-// }
+// *----------------*-------------* //
+//login and signup features
 
+// Set this variable to true if the user is logged in, or false if not logged in
+let isLoggedIn = false;
+
+function checkSession() {
+  const token = sessionStorage.getItem("token");
+  if (token) {
+    // User has an active session
+    isLoggedIn = true;
+  } else {
+    // User does not have an active session
+    isLoggedIn = false;
+  }
+}
+
+checkSession();
+// Function to check the login status and update buttons
+function updateButtons() {
+  if (isLoggedIn) {
+    showLogoutButton();
+  } else {
+    showLoginButton();
+  }
+}
 
 const loginForm = document.getElementById('login-form')
 const signupForm = document.getElementById('create-form')
@@ -78,8 +137,12 @@ function signup(evt) {
 
 
 // login
+console.log('Before calling login function');
 function login(evt) {
   evt.preventDefault()
+
+  console.log(inputLogin);
+  console.log(passwordLogin);
   const body = {
     email: inputLogin.value,
     password: passwordLogin.value
@@ -88,23 +151,43 @@ function login(evt) {
     .post(`${BASE_URL}/api/login`, body)
     .then((res) => {
       console.log('res', res)
-      alert(res.data)
       console.log('line 69 front end', res.data);
       let token = res.data.token;
       sessionStorage.setItem("token", token);
       sessionStorage.setItem("userId", res.data.flashcards_users_id);
+      // Set isLoggedIn to true since the user is now logged in
+      console.log('After setting session items');
+      isLoggedIn = true;
+      console.log('After updating isLoggedIn');
+      // Toggle the visibility of the div after successful login
+      const displayQuotesDiv = document.getElementById('div-quotes');
+      displayQuotesDiv.classList.add('hidden')
+      console.log('Reached here');
+
+      updateButtons(); // Update the buttons after login
+      console.log('After updateButtons call');
+
       window.location.href = `/`;
+      stopDisplayingRandomQuotes();
     })
     .catch((err) => console.log(err));
 
 }
+console.log('After calling login function');
+
+
 
 function logout() {
   console.log('logout')
   sessionStorage.removeItem("token")
+  isLoggedIn = false;
+  updateButtons()
+  window.location.href = `/`;
 
 
 }
+updateButtons();
+
 
 //login form 
 loginForm.addEventListener('submit', login)
@@ -116,8 +199,6 @@ signupForm.addEventListener('submit', signup)
 // *----------------*-------------* //
 
 // GET flashcards
-const behavioralList = document.getElementById('behavioral-flashcards')
-const technicalList = document.getElementById('technical-flashcards')
 const createBtn = document.getElementById('create')
 
 // display cards
@@ -129,6 +210,26 @@ function displayCards() {
     : axios.get(`${BASE_URL}/api/flashcards?user_id=${userId}`)
       .then(res => {
         // console.log('from displayCards', res.data)
+
+        const displayCards = document.getElementById('display-flashcards')
+        displayCards.innerHTML = `
+        <div class="shadow-lg">
+        <h2 class="pt-8 mt-2 mb-3 text-center font-bold drop-shadow-lg text-sky-600 text-2xl">Behavioral Questions
+        </h2>
+        <div class="grid grid-cols-2 justify-items-center" id="behavioral-flashcards">
+        </div>
+    </div>
+<div>
+        <h2 class="pt-8 mt-2 mb-3 text-center font-bold drop-shadow-lg text-sky-600 text-2xl">Technical Questions
+        </h2>
+        <div class="grid grid-cols-2 justify-items-center" id="technical-flashcards">
+        </div>
+
+    </div>
+
+        `
+        const behavioralList = document.getElementById('behavioral-flashcards')
+        const technicalList = document.getElementById('technical-flashcards')
         res.data.forEach(card => {
           // console.log('from each inside displayCards', card)
 
@@ -220,8 +321,5 @@ function favoriteCard(isFavorited, flashcardId) {
       console.error('Error favoriting the card:', err);
     });
 }
-
-
-
 
 displayCards()

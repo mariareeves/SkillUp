@@ -43,8 +43,8 @@
                             data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
                             onclick="toggleModal('authentication-modal')">Login</button>
                         <button type="button" id="logout-btn"
-                            class=" font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 text-white-900 bg-gradient-to-r from-sky-500 via-sky-600 to-sky-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-sky-300 dark:focus:ring-sky-800 shadow-lg shadow-sky-500/50 dark:shadow-lg dark:shadow-sky-800/80"
-                            onclick="logout()">LogOut</button>
+                            class="font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 text-white-900 bg-gradient-to-r from-sky-500 via-sky-600 to-sky-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-sky-300 dark:focus:ring-sky-800 shadow-lg shadow-sky-500/50 dark:shadow-lg dark:shadow-sky-800/80"
+                            onclick="logout()">Logout</button>
                     </li>
                 </ul>
                 <!-- Main modal -->
@@ -165,14 +165,19 @@
         </a>
     </section>
     <hr class="shadow-md drop-shadow-sm border-2">
-    <!-- Display cards -->
+    <div class="flex items-center justify-center m-8 flex-col" id="div-quotes">
+        <h2 id="display-quotes"
+            class="text-slate-300 text-center font-normal p-4 mt-2 text-2xl tracking-wide leading-relaxed"></h2>
+    </div>
     <div class="grid grid-cols-2 gap-4 h-screen" id="display-flashcards">
-        <div class="shadow-lg">
+
+
+        <!-- <div class="shadow-lg">
             <h2 class="pt-8 mt-2 mb-3 text-center font-bold drop-shadow-lg text-sky-600 text-2xl">Behavioral Questions
             </h2>
-            <!-- creating two columns, two cards per row-->
+           
             <div class="grid grid-cols-2 justify-items-center" id="behavioral-flashcards">
-                <!-- div to hold front and back card -->
+            
 
 
             </div>
@@ -187,12 +192,13 @@
 
             </div>
 
-        </div>
+        </div> -->
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"
         integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script src="/main.js"></script>
 
 </body>
