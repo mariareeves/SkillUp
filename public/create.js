@@ -16,25 +16,27 @@ const createBtn = document.getElementById('create')
 // form handler
 function createFlashcards(evt) {
   evt.preventDefault()
+  let token = sessionStorage.getItem("token");
+  let userId = sessionStorage.getItem("userId")
 
   let body = {
     question: questionInput.value,
     category: cardSelect.value,
     answer: textareaAnswer.value,
+    user_id: userId,
   }
 
   questionInput.value = ''
   textareaAnswer.value = ''
   console.log('this is the body', body)
-  axios.post(`${BASE_URL}/api/flashcards`, body)
-    .then(() => {
-      alert('it worked')
-      console.log('create function front end')
-
-
-
-    })
-    .catch(err => console.log('error coming form front end create function', err))
+  token == null
+    ? alert("Please login to create cards")
+    : axios.post(`${BASE_URL}/api/flashcards`, body)
+      .then(() => {
+        alert('it worked')
+        console.log('create function front end')
+      })
+      .catch(err => console.log('error coming form front end create function', err))
 }
 
 // form event listener 

@@ -13,14 +13,14 @@ app.get('/', (req, res) => {
 
 app.use(express.json())
 app.use(cors())
-app.use(express.static('public'))
+app.use(express.static(path.join(__dirname, '../public')))
+
 
 //require signup and login from userController.js
 const { signup, login } = require('./userController')
 
 //require modules from controller.js
 const { getCards, createCards, deleteCard, updateCard, getOneCard, favoriteCard, getFavoriteCards } = require('./controller.js');
-const { log } = require('console');
 
 
 
@@ -29,7 +29,7 @@ const { log } = require('console');
 
 // AUTH endpoint
 app.post('/api/login', login)
-app.post('/api/signUp', signup)
+app.post('/api/signup', signup)
 
 // FLASHCARDS endpoints
 app.get('/api/flashcards', getCards)

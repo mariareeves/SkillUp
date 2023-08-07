@@ -17,14 +17,100 @@ function toggleModal(modalId) {
 }
 
 function showLoginForm() {
-  document.getElementById('login-form').classList.remove('hidden');
-  document.getElementById('create-account-form').classList.add('hidden');
+  document.getElementById('login-div').classList.remove('hidden');
+  document.getElementById('createAccount-div').classList.add('hidden');
 }
 
 function showCreateAccountForm() {
-  document.getElementById('login-form').classList.add('hidden');
-  document.getElementById('create-account-form').classList.remove('hidden');
+  document.getElementById('login-div').classList.add('hidden');
+  document.getElementById('createAccount-div').classList.remove('hidden');
 }
+
+//show login or logout button
+
+// Function to hide login button and show logout button
+function showLogoutButton() {
+  document.getElementById("login-btn").style.display = "none";
+  document.getElementById("logout-btn").style.display = "block";
+}
+
+// Function to hide logout button and show login button
+function showLoginButton() {
+  document.getElementById("login-btn").style.display = "block";
+  document.getElementById("logout-btn").style.display = "none";
+}
+
+
+// Check if the user is signed in and show the appropriate button
+// if (isUserSignedIn()) {
+//   showLogoutButton();
+// } else {
+//   showLoginButton();
+// }
+
+
+const loginForm = document.getElementById('login-form')
+const signupForm = document.getElementById('create-form')
+const inputLogin = document.getElementById('email-login')
+const passwordLogin = document.getElementById('password-login')
+const inputSignup = document.getElementById('email-signup')
+const passwordSignup = document.getElementById('password-signup')
+
+// signup
+function signup(evt) {
+  evt.preventDefault()
+  const body = {
+    email: inputSignup.value,
+    password: passwordSignup.value
+  }
+  axios
+    .post(`${BASE_URL}/api/signUp`, body)
+    .then(async (res) => {
+      alert('sign up worked')
+      let token = await res.data.token
+      console.log(res.data);
+      sessionStorage.setItem("token", token)
+      sessionStorage.setItem("userId", res.data.flashcards_users_id);
+      window.location.href = `/`;
+    })
+    .catch((err) => console.log(err));
+}
+
+
+// login
+function login(evt) {
+  evt.preventDefault()
+  const body = {
+    email: inputLogin.value,
+    password: passwordLogin.value
+  }
+  axios
+    .post(`${BASE_URL}/api/login`, body)
+    .then((res) => {
+      console.log('res', res)
+      alert(res.data)
+      console.log('line 69 front end', res.data);
+      let token = res.data.token;
+      sessionStorage.setItem("token", token);
+      sessionStorage.setItem("userId", res.data.flashcards_users_id);
+      window.location.href = `/`;
+    })
+    .catch((err) => console.log(err));
+
+}
+
+function logout() {
+  console.log('logout')
+  sessionStorage.removeItem("token")
+
+
+}
+
+//login form 
+loginForm.addEventListener('submit', login)
+//signup form
+signupForm.addEventListener('submit', signup)
+
 
 
 // *----------------*-------------* //
@@ -36,22 +122,25 @@ const createBtn = document.getElementById('create')
 
 // display cards
 function displayCards() {
+  let token = sessionStorage.getItem("token");
+  let userId = sessionStorage.getItem("userId")
+  console.log('userId', userId)
+  token == null ? alert("Please login to display cards")
+    : axios.get(`${BASE_URL}/api/flashcards?user_id=${userId}`)
+      .then(res => {
+        // console.log('from displayCards', res.data)
+        res.data.forEach(card => {
+          // console.log('from each inside displayCards', card)
 
-  axios.get(`${BASE_URL}/api/flashcards`)
-    .then(res => {
-      console.log('from displayCards', res.data)
-      res.data.forEach(card => {
-        console.log('from each inside displayCards', card)
-
-        //random colors from tailwindcss
-        const cardColors = ['bg-pink-100',
-          'bg-yellow-100',
-          'bg-sky-100',
-          'bg-green-100']
-        // Calculate the random index
-        const randomIndex = Math.floor(Math.random() * cardColors.length);
-        const randomColor = cardColors[randomIndex]; //add the random index to the colors array
-        const cardElement = `
+          //random colors from tailwindcss
+          const cardColors = ['bg-pink-100',
+            'bg-yellow-100',
+            'bg-sky-100',
+            'bg-green-100']
+          // Calculate the random index
+          const randomIndex = Math.floor(Math.random() * cardColors.length);
+          const randomColor = cardColors[randomIndex]; //add the random index to the colors array
+          const cardElement = `
           <div data-card-id="${card.flashcard_id}" class="h-64 w-64 m-8 cursor-pointer group perspective">
             <div class="relative preserve-3d group-hover:my-rotate-y-180 w-full h-full duration-1000 flex justify-center shadow-lg">
               <div class="absolute backface-hidden w-full h-full flex flex-col items-center ${randomColor}">
@@ -87,23 +176,23 @@ function displayCards() {
         `;
 
 
-        if (card.category === 'behavioral') {
-          behavioralList.innerHTML += cardElement;
-        } else if (card.category === 'technical') {
-          technicalList.innerHTML += cardElement;
-        }
+          if (card.category === 'behavioral') {
+            behavioralList.innerHTML += cardElement;
+          } else if (card.category === 'technical') {
+            technicalList.innerHTML += cardElement;
+          }
 
 
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching flashcards:', error);
       });
-    })
-    .catch(error => {
-      console.error('Error fetching flashcards:', error);
-    });
 }
 
 
 function deleteCard(id) {
-  console.log('id in deleteCard', id)
+  // console.log('id in deleteCard', id)
   axios.delete(`${BASE_URL}/api/flashcards/${id}`)
     .then(() => {
       console.log('deleted!')

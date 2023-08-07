@@ -38,10 +38,13 @@
                             class="block py-2 pl-3 pr-4 mr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-amber-700 md:p-0 dark:text-white md:dark:hover:text-amber-400 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ">Practice</a>
                     </li>
                     <li>
-                        <button type="button"
+                        <button type="button" id="login-btn"
                             class="block  font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 text-white-900 bg-gradient-to-r from-sky-500 via-sky-600 to-sky-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-sky-300 dark:focus:ring-sky-800 shadow-lg shadow-sky-500/50 dark:shadow-lg dark:shadow-sky-800/80"
                             data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
                             onclick="toggleModal('authentication-modal')">Login</button>
+                        <button type="button" id="logout-btn"
+                            class=" font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 text-white-900 bg-gradient-to-r from-sky-500 via-sky-600 to-sky-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-sky-300 dark:focus:ring-sky-800 shadow-lg shadow-sky-500/50 dark:shadow-lg dark:shadow-sky-800/80"
+                            onclick="logout()">LogOut</button>
                     </li>
                 </ul>
                 <!-- Main modal -->
@@ -60,24 +63,25 @@
                                 </svg>
                                 <span class="sr-only">Close modal</span>
                             </button>
-                            <!-- Login forml -->
-                            <div class="px-6 py-6 lg:px-8" id="login-form">
+                            <!-- Login form -->
+                            <div class="px-6 py-6 lg:px-8" id="login-div">
                                 <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Sign in to our
                                     platform</h3>
-                                <form class="space-y-6">
+                                <form class="space-y-6" id="login-form">
                                     <div>
                                         <label for="email"
                                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your
                                             email</label>
-                                        <input type="email" name="email" id="email"
+                                        <input type="email" name="email" id="email-login"
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                                             placeholder="name@company.com" required>
                                     </div>
                                     <div>
-                                        <label for="password"
+                                        <label for="password-login"
                                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your
                                             password</label>
-                                        <input type="password" name="password" id="password" placeholder="••••••••"
+                                        <input type="password" name="password" id="password-login"
+                                            placeholder="••••••••"
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                                             required>
                                     </div>
@@ -85,26 +89,26 @@
 
 
                                     </div>
-                                    <button type="submit"
+                                    <button type="submit" id="loginBtn"
                                         class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login
                                         to your account</button>
-                                    <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
-                                        Not registered? <button onclick="showCreateAccountForm()"
-                                            class="text-blue-700 hover:underline dark:text-blue-500">Create
-                                            account</button>
-                                    </div>
                                 </form>
+                                <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
+                                    Not registered? <button onclick="showCreateAccountForm()"
+                                        class="text-blue-700 hover:underline dark:text-blue-500">Create
+                                        account</button>
+                                </div>
                             </div>
                             <!-- Create an account form -->
-                            <div class="hidden px-6 py-6 lg:px-8" id="create-account-form">
+                            <div class="hidden px-6 py-6 lg:px-8" id="createAccount-div">
                                 <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Create an account
                                 </h3>
-                                <form class="space-y-6">
+                                <form class="space-y-6" id="create-form">
                                     <div>
                                         <label for="email"
                                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your
                                             email</label>
-                                        <input type="email" name="email" id="email"
+                                        <input type="email" name="email" id="email-signup"
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                                             placeholder="name@company.com" required>
                                     </div>
@@ -112,7 +116,8 @@
                                         <label for="password"
                                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your
                                             password</label>
-                                        <input type="password" name="password" id="password" placeholder="••••••••"
+                                        <input type="password" name="password" id="password-signup"
+                                            placeholder="••••••••"
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                                             required>
                                     </div>
@@ -120,14 +125,14 @@
 
 
                                     </div>
-                                    <button type="submit"
+                                    <button type="submit" id="signupBtn"
                                         class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login
                                         to your account</button>
-                                    <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
-                                        Already have an account? <button onclick="showLoginForm()"
-                                            class="text-blue-700 hover:underline dark:text-blue-500">Login</button>
-                                    </div>
                                 </form>
+                                <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
+                                    Already have an account? <button onclick="showLoginForm()"
+                                        class="text-blue-700 hover:underline dark:text-blue-500">Login</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -185,8 +190,10 @@
         </div>
     </div>
 
-    <script src="../node_modules/axios/dist/axios.min.js"></script>
-    <script src="main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"
+        integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/main.js"></script>
 
 </body>
 

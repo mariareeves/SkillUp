@@ -44,9 +44,11 @@ module.exports = {
         }).catch(err => console.log('error seeding DB', err))
     },
     getCards: (req, res) => {
-        sequelize.query('select * from flashcards order by created_date desc;')
+        const user_id = req.query.user_id
+        console.log('line 48 user_id', user_id)
+        sequelize.query(`select * from flashcards where user_id = ${user_id} order by created_date desc;`)
             .then(dbRes => {
-                console.log('I am in the getCards', dbRes[0])
+                // console.log('I am in the getCards', dbRes[0])
                 res.status(200).send(dbRes[0])
             })
             .catch(err => {
@@ -55,7 +57,8 @@ module.exports = {
             })
     },
     createCards: (req, res) => {
-        const { question, answer, category } = req.body;
+        const { question, answer, category, user_id } = req.body;
+        console.log('userid created', user_id)
 
         // Ensure the category is one of the allowed enum values
         const allowedCategories = ['behavioral', 'technical'];
@@ -66,8 +69,8 @@ module.exports = {
         const created_date = new Date().toISOString().split('T')[0]; // Get the current date in YYYY-MM-DD format
         const newAnswer = answer.replace("'", "''") // replace the single quotes to two single quotes bc sql does not accept single quotes in the middle of the string
         sequelize.query(`
-            INSERT INTO flashcards(question, answer, category, created_date)
-            VALUES('${question}', '${newAnswer}', '${category}', '${created_date}')
+            INSERT INTO flashcards(user_id, question, answer, category, created_date)
+            VALUES(${user_id},'${question}', '${newAnswer}', '${category}', '${created_date}')
             RETURNING *;
         `)
             .then(dbRes => {
