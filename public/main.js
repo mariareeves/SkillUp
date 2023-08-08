@@ -364,7 +364,7 @@ function favoriteCard(isFavorited, flashcardId) {
   axios.put(`/api/flashcard/${flashcardId}`, { favoriteCard: !isFavorited })
     .then(res => {
       // Success: You may show a success message or update the UI accordingly
-      console.log('Card favorited successfully!');
+      alertify.success('Card favorited succesfully!');
     })
     .catch(err => {
       // Error handling: Display an error message or handle the error as needed

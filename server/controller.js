@@ -1,45 +1,42 @@
 // require dotenv package
 require('dotenv').config
-const { DB, USER, PASSWORD } = process.env
+const { CONNECTION_STRING } = process.env
 
-let randomQuote;
 
 //require sequelize
 const Sequelize = require('sequelize')
 
 // instanciating a new Sequelize
-const sequelize = new Sequelize(DB, USER, PASSWORD, {
-    host: 'localhost',
+const sequelize = new Sequelize(CONNECTION_STRING, {
     dialect: 'postgres',
-    operatorsAliases: false,
-    pool: {
-        max: 10,
-        min: 0,
-        acquire: 20000,
-        idle: 5000
+    dialectOptions: {
+        ssl: {
+            rejectUnauthorized: false
+        }
     }
 })
 
 module.exports = {
     seed: (req, res) => {
         sequelize.query(`
-            drop table if exists practice;
-            drop table if exists favoritescards;
             drop table if exists flashcards;
+            drop table if exists flashcards_users;
             
             create type flashcard_category as enum('behavioral', 'technical');
+            create table flashcards_users (
+                flashcards_users_id serial primary key,
+                email varchar not null,
+                passhash varchar(500) not null
+            );
             create table flashcards (
                 flashcard_id serial primary key,
                 question varchar(300),
                 answer text,
                 category flashcard_category,
-                created_date date
+                created_date date,
+                favoriteCard boolean default false,
+                user_id integer references flashcards_users(flashcards_users_id)
             );
-
-            insert into flashcards(question, answer, category, created_date)
-            values('Tell me about yourself', 'I am Maria, I am from Brazil, I am studying to be a Software Engineer', 'behavioral', '2023-07-24'), ('just test', 'test', 'technical','2023-08-01')
-            
-            ;
         `).then(() => {
             console.log('DB seeded!')
             res.sendStatus(200)
@@ -142,7 +139,7 @@ module.exports = {
         console.log('essa e a minha nova favoriteCard: ', favoriteCard);
 
         sequelize.query(`
-            update flashcards set "favoriteCard"= ${favoriteCard}
+            update flashcards set favoriteCard= ${favoriteCard}
             where flashcard_id = ${id};
         `)
             .then(dbRes => res.sendStatus(200))
@@ -150,7 +147,8 @@ module.exports = {
     },
     getFavoriteCards: (req, res) => {
         const user_id = req.query.user_id
-        sequelize.query(`select * from flashcards where user_id=${user_id} and "favoriteCard" = true;`)
+        console.log('user favorite card', user_id)
+        sequelize.query(`select * from flashcards where user_id=${user_id} and favoriteCard = true;`)
             .then(dbRes => {
                 console.log('I am in the getFavoriteCards', dbRes[0])
                 res.status(200).send(dbRes[0])

@@ -2,7 +2,7 @@
 require('dotenv').config
 
 const bcrypt = require('bcryptjs')
-const { DB, USER, PASSWORD, SECRET } = process.env
+const { CONNECTION_STRING, SECRET } = process.env
 const jwt = require("jsonwebtoken")
 
 //create a token using jwt
@@ -24,18 +24,14 @@ const createToken = (email, id) => {
 const Sequelize = require('sequelize')
 
 // instanciating a new Sequelize
-const sequelize = new Sequelize(DB, USER, PASSWORD, {
-    host: 'localhost',
+const sequelize = new Sequelize(CONNECTION_STRING, {
     dialect: 'postgres',
-    operatorsAliases: false,
-    pool: {
-        max: 10,
-        min: 0,
-        acquire: 20000,
-        idle: 5000
+    dialectOptions: {
+        ssl: {
+            rejectUnauthorized: false
+        }
     }
 })
-
 
 
 module.exports = {

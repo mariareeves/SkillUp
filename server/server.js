@@ -3,7 +3,7 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const path = require('path');
-
+const { SERVER_PORT } = process.env
 
 //view engine setup
 app.get('/', (req, res) => {
@@ -20,12 +20,12 @@ app.use(express.static(path.join(__dirname, '../public')))
 const { signup, login } = require('./userController')
 
 //require modules from controller.js
-const { getCards, createCards, deleteCard, updateCard, getOneCard, favoriteCard, getFavoriteCards } = require('./controller.js');
+const { seed, getCards, createCards, deleteCard, updateCard, getOneCard, favoriteCard, getFavoriteCards } = require('./controller.js');
 
 
 
 // DEV
-// app.post('/api/seed', seed)
+app.post('/api/seed', seed)
 
 // AUTH endpoint
 app.post('/api/login', login)
@@ -42,8 +42,5 @@ app.put('/api/flashcard/:id', favoriteCard)
 
 
 
-const port = 4000;
-app.listen(port, () => {
-    console.log(`Listening on port ${port}`)
-})
+app.listen(SERVER_PORT, () => console.log(`up on ${SERVER_PORT}`))
 
