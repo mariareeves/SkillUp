@@ -131,13 +131,18 @@ function signup(evt) {
     password: passwordSignup.value
   }
   axios
-    .post(`${BASE_URL}/api/signUp`, body)
+    .post(`/api/signUp`, body)
     .then(async (res) => {
       alertify.success('Your account was created succesfully.')
       let token = await res.data.token
       console.log(res.data);
       sessionStorage.setItem("token", token)
       sessionStorage.setItem("userId", res.data.flashcards_users_id);
+      isLoggedIn = true;
+      clearInterval(quoteInterval)
+      const displayQuotesDiv = document.getElementById('div-quotes');
+      displayQuotesDiv.classList.add('hidden')
+      updateButtons();
       window.location.href = `/`;
     })
     .catch((err) => console.log(err));
@@ -157,7 +162,7 @@ function login(event) {
     password: passwordLogin.value
   }
   axios
-    .post(`${BASE_URL}/api/login`, body)
+    .post(`/api/login`, body)
     .then((res) => {
       console.log('res', res)
       console.log('line 69 front end', res.data);
@@ -212,7 +217,7 @@ function testFunc(event) {
   }
   console.log('body', body)
   axios
-    .post(`${BASE_URL}/api/login`, body)
+    .post(`/api/login`, body)
     .then((res) => {
       console.log('line 69 front end', res.data);
       let token = res.data.token;
@@ -254,7 +259,7 @@ function displayCards() {
   let userId = sessionStorage.getItem("userId")
   console.log('userId', userId)
   token == null ? alertify.alert('SkillUp', 'Please login to create flashcards!')
-    : axios.get(`${BASE_URL}/api/flashcards?user_id=${userId}`)
+    : axios.get(`/api/flashcards?user_id=${userId}`)
       .then(res => {
         // console.log('from displayCards', res.data)
 
@@ -339,7 +344,7 @@ function displayCards() {
 
 function deleteCard(id) {
   // console.log('id in deleteCard', id)
-  axios.delete(`${BASE_URL}/api/flashcards/${id}`)
+  axios.delete(`/api/flashcards/${id}`)
     .then(() => {
       console.log('deleted!')
       // Find the card element with the corresponding data-card-id attribute
@@ -356,7 +361,7 @@ function favoriteCard(isFavorited, flashcardId) {
   console.log('update favorites', flashcardId)
   console.log('isFavorited', isFavorited)
   // Send a request to update the favoriteCard value
-  axios.put(`${BASE_URL}/api/flashcard/${flashcardId}`, { favoriteCard: !isFavorited })
+  axios.put(`/api/flashcard/${flashcardId}`, { favoriteCard: !isFavorited })
     .then(res => {
       // Success: You may show a success message or update the UI accordingly
       console.log('Card favorited successfully!');
