@@ -30,9 +30,10 @@ function createFlashcards(evt) {
   textareaAnswer.value = ''
   console.log('this is the body', body)
   token == null
-    ? alert("Please login to create cards")
+    ? alertify.alert('SkillUp', 'Please login to create flashcards!', function () { alertify.success('Ok') })
     : axios.post(`${BASE_URL}/api/flashcards`, body)
       .then(() => {
+        alertify.success('Your card was created succesfully.');
         console.log('create function front end')
       })
       .catch(err => console.log('error coming form front end create function', err))

@@ -67,14 +67,20 @@ module.exports = {
         if (!allowedCategories.includes(category)) {
             return res.status(400).send("Invalid category. Allowed values are 'behavioral' and 'technical'.");
         }
-
+        //parameterized queries to accept single quotes
         const created_date = new Date().toISOString().split('T')[0]; // Get the current date in YYYY-MM-DD format
         const newAnswer = answer.replace("'", "''") // replace the single quotes to two single quotes bc sql does not accept single quotes in the middle of the string
+        // bind provides values that need to be bound to the placeholders ($1, $2, etc.) in the SQL query.
+        //type contains the values that will replace the placeholders in the SQL query. 
         sequelize.query(`
-            INSERT INTO flashcards(user_id, question, answer, category, created_date)
-            VALUES(${user_id},'${question}', '${newAnswer}', '${category}', '${created_date}')
-            RETURNING *;
-        `)
+    INSERT INTO flashcards(user_id, question, answer, category, created_date)
+    VALUES($1, $2, $3, $4, $5)
+    RETURNING *;
+`, {
+            bind: [user_id, question, newAnswer, category, created_date],
+            type: sequelize.QueryTypes.INSERT
+        })
+
             .then(dbRes => {
                 res.status(201).send(dbRes[0]);
             })
@@ -143,7 +149,8 @@ module.exports = {
             .catch(err => console.log('error updating favoriteCard', err))
     },
     getFavoriteCards: (req, res) => {
-        sequelize.query('select * from flashcards where "favoriteCard" = true;')
+        const user_id = req.query.user_id
+        sequelize.query(`select * from flashcards where user_id=${user_id} and "favoriteCard" = true;`)
             .then(dbRes => {
                 console.log('I am in the getFavoriteCards', dbRes[0])
                 res.status(200).send(dbRes[0])

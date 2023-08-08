@@ -50,7 +50,7 @@ function updateCard(evt) {
   axios
     .put(`${BASE_URL}/api/flashcards/${flashcardId}`, body)
     .then((res) => {
-      alert('Flashcard updated successfully.');
+      alertify.success('Flashcard updated successfully.');
       console.log('Update function front end', res);
       window.location.href = "index.html"
       // Optionally, you can redirect the user back to the main page or do something else after the update.

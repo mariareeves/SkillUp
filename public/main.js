@@ -133,7 +133,7 @@ function signup(evt) {
   axios
     .post(`${BASE_URL}/api/signUp`, body)
     .then(async (res) => {
-      alert('sign up worked')
+      alertify.success('Your account was created succesfully.')
       let token = await res.data.token
       console.log(res.data);
       sessionStorage.setItem("token", token)
@@ -253,7 +253,7 @@ function displayCards() {
   let token = sessionStorage.getItem("token");
   let userId = sessionStorage.getItem("userId")
   console.log('userId', userId)
-  token == null ? alert("Please login to display cards")
+  token == null ? alertify.alert('SkillUp', 'Please login to create flashcards!')
     : axios.get(`${BASE_URL}/api/flashcards?user_id=${userId}`)
       .then(res => {
         // console.log('from displayCards', res.data)
