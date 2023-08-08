@@ -5,42 +5,47 @@ const BASE_URL = 'http://localhost:4000'
 
 
 // *----------------*-------------* //
-// //display quotes 
+//display quotes 
 const displayQuotes = document.getElementById('display-quotes')
-function displayQuote(quote) {
+let randomQuote;
+let quoteInterval;
 
-  displayQuotes.innerHTML = `"${quote}"`
-}
-let randomQuoteIntervalId = null; // Declare a variable to store the interval ID
-
-function getRandomQuote() {
-  axios.get(`${BASE_URL}/api/random-quote?_=${Date.now()}`)
-    .then((res) => {
-      const randomQuote = res.data
-      console.log('line 150', randomQuote)
-      displayQuote(randomQuote)
+function getQuotes(req, res) {
+  axios.get('https://type.fit/api/quotes')
+    .then(response => {
+      const quotes = response.data;
+      const randomIndex = Math.floor(Math.random() * quotes.length);
+      randomQuote = quotes[randomIndex].text;
+      res.status(200).send(randomQuote);
     })
-    .catch(err => console.log(err))
-}
-// Function to fetch and display a random quote at a specified interval
-function displayRandomQuotesInterval(interval) {
-  getRandomQuote(); // Display the first quote immediately
-
-  randomQuoteIntervalId = setInterval(() => {
-    getRandomQuote();
-  }, interval);
+    .catch(err => {
+      console.log(err);
+      res.status(500).send('Error fetching quotes');
+    });
 }
 
-// Function to stop displaying random quotes
-function stopDisplayingRandomQuotes() {
-  if (randomQuoteIntervalId !== null) {
-    clearInterval(randomQuoteIntervalId);
-    randomQuoteIntervalId = null;
-  }
+function displayRandomQuote() {
+  axios.get('https://type.fit/api/quotes')
+    .then(response => {
+      displayQuotes.innerHTML = '';
+      const quotes = response.data;
+      const randomIndex = Math.floor(Math.random() * quotes.length);
+      let quote = quotes[randomIndex].text;
+      console.log(quote);
+
+      displayQuotes.innerHTML = `<div>${quote}</div>`;
+    })
+    .catch(err => {
+      console.log(err);
+      displayQuotes.innerHTML = '<div>Error fetching quote</div>';
+    });
 }
 
-const INTERVAL_TIME = 5000; // 5 seconds (adjust the time interval as desired)
-displayRandomQuotesInterval(INTERVAL_TIME);
+// Call the displayRandomQuote function initially to show a quote immediately
+displayRandomQuote();
+
+// Set an interval to display a new random quote every 3 seconds
+quoteInterval = setInterval(displayRandomQuote, 3000);
 
 // *----------------*-------------* //
 
@@ -166,9 +171,10 @@ function login(evt) {
 
       updateButtons(); // Update the buttons after login
       console.log('After updateButtons call');
-
+      // Clear the interval when a user is logged in
+      clearInterval(quoteInterval);
       window.location.href = `/`;
-      stopDisplayingRandomQuotes();
+
     })
     .catch((err) => console.log(err));
 

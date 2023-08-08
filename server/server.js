@@ -20,7 +20,7 @@ app.use(express.static(path.join(__dirname, '../public')))
 const { signup, login } = require('./userController')
 
 //require modules from controller.js
-const { getCards, createCards, deleteCard, updateCard, getOneCard, favoriteCard, getFavoriteCards, getQuotes } = require('./controller.js');
+const { getCards, createCards, deleteCard, updateCard, getOneCard, favoriteCard, getFavoriteCards } = require('./controller.js');
 
 
 
@@ -39,7 +39,7 @@ app.post('/api/flashcards', createCards)
 app.delete('/api/flashcards/:id', deleteCard)
 app.put('/api/flashcards/:id', updateCard)
 app.put('/api/flashcard/:id', favoriteCard)
-app.get('/api/random-quote', getQuotes)
+
 
 
 const port = 4000;

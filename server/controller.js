@@ -2,7 +2,8 @@
 require('dotenv').config
 const { DB, USER, PASSWORD } = process.env
 
-const { getRandomQuote } = require('inspirational-quotes')
+let randomQuote;
+
 //require sequelize
 const Sequelize = require('sequelize')
 
@@ -152,9 +153,5 @@ module.exports = {
                 res.status(500).send(err)
             })
     },
-    getQuotes: (req, res) => {
-        const randomQuote = getRandomQuote()
-        console.log('line 157', randomQuote)
-        res.status(200).send(randomQuote)
-    }
+
 }
