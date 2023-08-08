@@ -33,7 +33,6 @@ function createFlashcards(evt) {
     ? alert("Please login to create cards")
     : axios.post(`${BASE_URL}/api/flashcards`, body)
       .then(() => {
-        alert('it worked')
         console.log('create function front end')
       })
       .catch(err => console.log('error coming form front end create function', err))

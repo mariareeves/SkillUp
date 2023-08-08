@@ -1,3 +1,4 @@
+
 console.log('test mainjs')
 //Base url 
 const BASE_URL = 'http://localhost:4000'
@@ -31,7 +32,7 @@ function displayRandomQuote() {
       const quotes = response.data;
       const randomIndex = Math.floor(Math.random() * quotes.length);
       let quote = quotes[randomIndex].text;
-      console.log(quote);
+      // console.log(quote);
 
       displayQuotes.innerHTML = `<div>${quote}</div>`;
     })
@@ -40,12 +41,14 @@ function displayRandomQuote() {
       displayQuotes.innerHTML = '<div>Error fetching quote</div>';
     });
 }
-
+console.log('line 44', sessionStorage.getItem('token'))
 // Call the displayRandomQuote function initially to show a quote immediately
-displayRandomQuote();
+if (sessionStorage.getItem('token') == null) {
+  displayRandomQuote();
+  // Set an interval to display a new random quote every 3 seconds
+  quoteInterval = setInterval(displayRandomQuote, 3000);
+}
 
-// Set an interval to display a new random quote every 3 seconds
-quoteInterval = setInterval(displayRandomQuote, 3000);
 
 // *----------------*-------------* //
 
@@ -143,8 +146,9 @@ function signup(evt) {
 
 // login
 console.log('Before calling login function');
-function login(evt) {
-  evt.preventDefault()
+function login(event) {
+  console.log('line 147 login')
+  event.preventDefault()
 
   console.log(inputLogin);
   console.log(passwordLogin);
@@ -164,15 +168,16 @@ function login(evt) {
       console.log('After setting session items');
       isLoggedIn = true;
       console.log('After updating isLoggedIn');
+      clearInterval(quoteInterval)
       // Toggle the visibility of the div after successful login
       const displayQuotesDiv = document.getElementById('div-quotes');
+      // displayQuotesDiv.style.display = 'none'
       displayQuotesDiv.classList.add('hidden')
       console.log('Reached here');
 
       updateButtons(); // Update the buttons after login
       console.log('After updateButtons call');
       // Clear the interval when a user is logged in
-      clearInterval(quoteInterval);
       window.location.href = `/`;
 
     })
@@ -196,7 +201,43 @@ updateButtons();
 
 
 //login form 
-loginForm.addEventListener('submit', login)
+function testFunc(event) {
+  event.preventDefault()
+  console.log('test function')
+  console.log(inputLogin);
+  console.log(passwordLogin);
+  const body = {
+    email: inputLogin.value,
+    password: passwordLogin.value
+  }
+  console.log('body', body)
+  axios
+    .post(`${BASE_URL}/api/login`, body)
+    .then((res) => {
+      console.log('line 69 front end', res.data);
+      let token = res.data.token;
+      console.log('token', token)
+      sessionStorage.setItem("token", token);
+      sessionStorage.setItem("userId", res.data.flashcards_users_id);
+      console.log('After setting session items');
+      isLoggedIn = true;
+      console.log('isLoggedIn', isLoggedIn)
+      console.log('After updating isLoggedIn');
+      const displayQuotesDiv = document.getElementById('div-quotes');
+      // const blockQuote = document.getElementById('block-quotes');
+      console.log(displayQuotesDiv)
+      displayQuotesDiv.classList.add('hidden')
+      // blockQuote.classList.add('hidden')
+      console.log('Reached here');
+      clearInterval(quoteInterval)
+      updateButtons();
+      console.log('After updateButtons call');
+      window.location.href = `/`;
+    })
+    .catch(err => console.log(err))
+
+}
+loginForm.addEventListener('submit', testFunc)
 //signup form
 signupForm.addEventListener('submit', signup)
 
@@ -205,7 +246,7 @@ signupForm.addEventListener('submit', signup)
 // *----------------*-------------* //
 
 // GET flashcards
-const createBtn = document.getElementById('create')
+const createBtn = document.getElementById('create-tag')
 
 // display cards
 function displayCards() {
@@ -219,18 +260,16 @@ function displayCards() {
 
         const displayCards = document.getElementById('display-flashcards')
         displayCards.innerHTML = `
-        <div class="shadow-lg">
-        <h2 class="pt-8 mt-2 mb-3 text-center font-bold drop-shadow-lg text-sky-600 text-2xl">Behavioral Questions
-        </h2>
-        <div class="grid grid-cols-2 justify-items-center" id="behavioral-flashcards">
-        </div>
-    </div>
-<div>
-        <h2 class="pt-8 mt-2 mb-3 text-center font-bold drop-shadow-lg text-sky-600 text-2xl">Technical Questions
-        </h2>
-        <div class="grid grid-cols-2 justify-items-center" id="technical-flashcards">
+        <div class="shadow-2xl p-6">
+          <h2 class="pt-8 mt-2 mb-3 text-center font-bold drop-shadow-xl text-sky-600 text-2xl">Behavioral Questions
+          </h2>
+          <div class="grid grid-cols-2 justify-items-center" id="behavioral-flashcards"></div>
         </div>
 
+    <div class="shadow-2xl p-6">
+        <h2 class="pt-8 mt-2 mb-3 text-center font-bold drop-shadow-xl text-sky-600 text-2xl">Technical Questions
+        </h2>
+        <div class="grid grid-cols-2 justify-items-center" id="technical-flashcards"></div>
     </div>
 
         `
