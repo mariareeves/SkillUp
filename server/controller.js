@@ -132,14 +132,14 @@ module.exports = {
             });
     },
     favoriteCard: (req, res) => {
-        let { favoriteCard } = req.body
-        console.log('inside favoriteCard', favoriteCard)
+        let { favoritecard } = req.body
+        console.log('inside favoriteCard', favoritecard)
         let { id } = req.params
         console.log('req.body', id)
-        console.log('essa e a minha nova favoriteCard: ', favoriteCard);
+        console.log('essa e a minha nova favoriteCard: ', favoritecard);
 
         sequelize.query(`
-            update flashcards set favoriteCard= ${favoriteCard}
+            update flashcards set favoritecard= ${favoritecard}
             where flashcard_id = ${id};
         `)
             .then(dbRes => res.sendStatus(200))
@@ -148,7 +148,7 @@ module.exports = {
     getFavoriteCards: (req, res) => {
         const user_id = req.query.user_id
         console.log('user favorite card', user_id)
-        sequelize.query(`select * from flashcards where user_id=${user_id} and favoriteCard = true;`)
+        sequelize.query(`select * from flashcards where user_id=${user_id} and favoritecard = true;`)
             .then(dbRes => {
                 console.log('I am in the getFavoriteCards', dbRes[0])
                 res.status(200).send(dbRes[0])
