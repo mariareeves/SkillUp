@@ -249,22 +249,30 @@ signupForm.addEventListener('submit', signup)
 
 
 // *----------------*-------------* //
+// // handle create card if users are not logged in 
+function handleCreateClick() {
+  let token = sessionStorage.getItem("token");
+
+  if (token === null) {
+    alertify.alert('SkillUp', 'Please login to create flashcards!')
+  } else {
+    // Redirect to the create page or perform any other action
+    window.location.href = "create.html"; // Replace with the actual URL
+  }
+}
+
 
 // GET flashcards
 const createBtn = document.getElementById('create-tag')
 
 // display cards
 function displayCards() {
-  let token = sessionStorage.getItem("token");
-  let userId = sessionStorage.getItem("userId")
-  console.log('userId', userId)
-  token == null ? alertify.alert('SkillUp', 'Please login to create flashcards!')
-    : axios.get(`/api/flashcards?user_id=${userId}`)
-      .then(res => {
-        // console.log('from displayCards', res.data)
+  axios.get(`/api/flashcards?user_id=${userId}`)
+    .then(res => {
+      // console.log('from displayCards', res.data)
 
-        const displayCards = document.getElementById('display-flashcards')
-        displayCards.innerHTML = `
+      const displayCards = document.getElementById('display-flashcards')
+      displayCards.innerHTML = `
         <div class="shadow-2xl p-6">
           <h2 class="pt-8 mt-2 mb-3 text-center font-bold drop-shadow-xl text-sky-600 text-2xl">Behavioral Questions
           </h2>
@@ -278,21 +286,21 @@ function displayCards() {
     </div>
 
         `
-        const behavioralList = document.getElementById('behavioral-flashcards')
-        const technicalList = document.getElementById('technical-flashcards')
-        res.data.forEach(card => {
-          console.log('from each inside displayCards', card.favoritecard)
+      const behavioralList = document.getElementById('behavioral-flashcards')
+      const technicalList = document.getElementById('technical-flashcards')
+      res.data.forEach(card => {
+        console.log('from each inside displayCards', card.favoritecard)
 
 
-          //random colors from tailwindcss
-          const cardColors = ['bg-pink-100',
-            'bg-yellow-100',
-            'bg-sky-100',
-            'bg-green-100']
-          // Calculate the random index
-          const randomIndex = Math.floor(Math.random() * cardColors.length);
-          const randomColor = cardColors[randomIndex]; //add the random index to the colors array
-          const cardElement = `
+        //random colors from tailwindcss
+        const cardColors = ['bg-pink-100',
+          'bg-yellow-100',
+          'bg-sky-100',
+          'bg-green-100']
+        // Calculate the random index
+        const randomIndex = Math.floor(Math.random() * cardColors.length);
+        const randomColor = cardColors[randomIndex]; //add the random index to the colors array
+        const cardElement = `
           <div data-card-id="${card.flashcard_id}" class="h-64 w-64 m-8 cursor-pointer group perspective">
             <div class="relative preserve-3d group-hover:my-rotate-y-180 w-full h-full duration-1000 flex justify-center shadow-lg">
               <div class="absolute backface-hidden w-full h-full flex flex-col items-center ${randomColor}">
@@ -328,18 +336,18 @@ function displayCards() {
         `;
 
 
-          if (card.category === 'behavioral') {
-            behavioralList.innerHTML += cardElement;
-          } else if (card.category === 'technical') {
-            technicalList.innerHTML += cardElement;
-          }
+        if (card.category === 'behavioral') {
+          behavioralList.innerHTML += cardElement;
+        } else if (card.category === 'technical') {
+          technicalList.innerHTML += cardElement;
+        }
 
 
-        });
-      })
-      .catch(error => {
-        console.error('Error fetching flashcards:', error);
       });
+    })
+    .catch(error => {
+      console.error('Error fetching flashcards:', error);
+    });
 }
 
 
