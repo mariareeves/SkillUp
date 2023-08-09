@@ -353,22 +353,22 @@ function displayCards() {
         console.error('Error fetching flashcards:', error);
       });
   }
+}
 
-
-  function deleteCard(id) {
-    // console.log('id in deleteCard', id)
-    axios.delete(`/api/flashcards/${id}`)
-      .then(() => {
-        console.log('deleted!')
-        // Find the card element with the corresponding data-card-id attribute
-        const cardElement = document.querySelector(`[data-card-id="${id}"]`);
-        if (cardElement) {
-          // Remove the card element from its parent node
-          cardElement.parentNode.removeChild(cardElement);
-        }
-      })
-      .catch(err => console.log(err))
-  }
+function deleteCard(id) {
+  // console.log('id in deleteCard', id)
+  axios.delete(`/api/flashcards/${id}`)
+    .then(() => {
+      console.log('deleted!')
+      // Find the card element with the corresponding data-card-id attribute
+      const cardElement = document.querySelector(`[data-card-id="${id}"]`);
+      if (cardElement) {
+        // Remove the card element from its parent node
+        cardElement.parentNode.removeChild(cardElement);
+      }
+    })
+    .catch(err => console.log(err))
+}
 }
 
 function favoriteCard(isFavorited, flashcardId) {
