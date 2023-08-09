@@ -369,7 +369,6 @@ function deleteCard(id) {
     })
     .catch(err => console.log(err))
 }
-}
 
 function favoriteCard(isFavorited, flashcardId) {
   console.log('update favorites', flashcardId)
