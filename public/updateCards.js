@@ -48,7 +48,7 @@ function updateCard(evt) {
   textareaAnswer.value = '';
 
   axios
-    .put(`${BASE_URL}/api/flashcards/${flashcardId}`, body)
+    .put(`/api/flashcards/${flashcardId}`, body)
     .then((res) => {
       alertify.success('Flashcard updated successfully.');
       console.log('Update function front end', res);
