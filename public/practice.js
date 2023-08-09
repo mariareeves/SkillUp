@@ -112,7 +112,7 @@ async function displayCards() {
 
     `
     try {
-        const res = await axios.get(`${BASE_URL}/api/favorites?user_id=${userId}`);
+        const res = await axios.get(`/api/favorites?user_id=${userId}`);
         console.log('from displayCards', res.data);
         const addCards = document.getElementById('add-cards');
         res.data.forEach(card => {

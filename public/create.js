@@ -31,7 +31,7 @@ function createFlashcards(evt) {
   console.log('this is the body', body)
   token == null
     ? alertify.alert('SkillUp', 'Please login to create flashcards!', function () { alertify.success('Ok') })
-    : axios.post(`${BASE_URL}/api/flashcards`, body)
+    : axios.post(`/api/flashcards`, body)
       .then(() => {
         alertify.success('Your card was created succesfully.');
         console.log('create function front end')
