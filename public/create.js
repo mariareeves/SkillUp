@@ -1,7 +1,6 @@
 console.log('create js')
 
-//Base url 
-const BASE_URL = 'http://localhost:4000'
+
 
 // POST flashcards
 // Create Form

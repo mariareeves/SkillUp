@@ -1,9 +1,5 @@
 
 console.log('test mainjs')
-//Base url 
-const BASE_URL = 'http://localhost:4000'
-
-
 
 // *----------------*-------------* //
 //display quotes 
@@ -149,49 +145,6 @@ function signup(evt) {
 }
 
 
-// login
-console.log('Before calling login function');
-function login(event) {
-  console.log('line 147 login')
-  event.preventDefault()
-
-  console.log(inputLogin);
-  console.log(passwordLogin);
-  const body = {
-    email: inputLogin.value,
-    password: passwordLogin.value
-  }
-  axios
-    .post(`/api/login`, body)
-    .then((res) => {
-      console.log('res', res)
-      console.log('line 69 front end', res.data);
-      let token = res.data.token;
-      sessionStorage.setItem("token", token);
-      sessionStorage.setItem("userId", res.data.flashcards_users_id);
-      // Set isLoggedIn to true since the user is now logged in
-      console.log('After setting session items');
-      isLoggedIn = true;
-      console.log('After updating isLoggedIn');
-      clearInterval(quoteInterval)
-      // Toggle the visibility of the div after successful login
-      const displayQuotesDiv = document.getElementById('div-quotes');
-      // displayQuotesDiv.style.display = 'none'
-      displayQuotesDiv.classList.add('hidden')
-      console.log('Reached here');
-
-      updateButtons(); // Update the buttons after login
-      console.log('After updateButtons call');
-      // Clear the interval when a user is logged in
-      window.location.href = `/`;
-
-    })
-    .catch((err) => console.log(err));
-
-}
-console.log('After calling login function');
-
-
 
 function logout() {
   console.log('logout')
@@ -206,7 +159,7 @@ updateButtons();
 
 
 //login form 
-function testFunc(event) {
+function login(event) {
   event.preventDefault()
   console.log('test function')
   console.log(inputLogin);
@@ -229,10 +182,8 @@ function testFunc(event) {
       console.log('isLoggedIn', isLoggedIn)
       console.log('After updating isLoggedIn');
       const displayQuotesDiv = document.getElementById('div-quotes');
-      // const blockQuote = document.getElementById('block-quotes');
       console.log(displayQuotesDiv)
       displayQuotesDiv.classList.add('hidden')
-      // blockQuote.classList.add('hidden')
       console.log('Reached here');
       clearInterval(quoteInterval)
       updateButtons();
@@ -242,7 +193,7 @@ function testFunc(event) {
     .catch(err => console.log(err))
 
 }
-loginForm.addEventListener('submit', testFunc)
+loginForm.addEventListener('submit', login)
 //signup form
 signupForm.addEventListener('submit', signup)
 
@@ -377,12 +328,10 @@ function favoriteCard(isFavorited, flashcardId) {
   // Send a request to update the favoriteCard value
   axios.put(`/api/flashcard/${flashcardId}`, { favoritecard: !isFavorited })
     .then(res => {
-      // Success: You may show a success message or update the UI accordingly
       alertify.success('Card favorited succesfully!');
       displayCards()
     })
     .catch(err => {
-      // Error handling: Display an error message or handle the error as needed
       console.error('Error favoriting the card:', err);
     });
 }

@@ -2,8 +2,6 @@
 console.log('practicejs')
 
 const synth = window.speechSynthesis;
-//Base url 
-const BASE_URL = 'http://localhost:4000'
 
 // *----------------*-------------* //
 //timer
@@ -153,33 +151,17 @@ async function displayCards() {
         console.error('Error fetching flashcards:', error);
     };
 
-
-
     // Attach event listener to the sound button
     const soundBtn = document.getElementById('soundBtn');
     soundBtn.addEventListener('click', function () {
         // Get all the swiper slides
         const slides = document.querySelectorAll('.swiper-slide-active');
-        console.log(slides)
-        // Loop through each slide and read its text content
+        // console.log(slides)
 
         speakCard(slides[0].textContent);
 
     });
 
-    // // Attach event listener to the sound button
-    // const soundBtn = document.getElementById('soundBtn');
-    // soundBtn.addEventListener('click', function () {
-    //     // Wait for 3 minutes before speaking
-    //     setTimeout(function () {
-    //         // Get all the swiper slides
-    //         const slides = document.querySelectorAll('.swiper-slide');
-    //         // Loop through each slide and read its text content
-    //         slides.forEach((slide) => {
-    //             speakCard(slide.textContent);
-    //         });
-    //     }, 3 * 60 * 1000); // 3 minutes in milliseconds
-    // });
 
 }
 

@@ -1,7 +1,6 @@
 console.log('update js')
 
-//Base url 
-const BASE_URL = 'http://localhost:4000'
+
 
 // POST flashcards
 const formUpdate = document.getElementById('form-update')
@@ -24,7 +23,7 @@ function getFlashcardIdFromUrl() {
 // Function to retrieve the flashcard details from the backend based on the ID
 function getFlashcardDetails(flashcardId) {
   console.log('getFlashcardDetails: ', flashcardId)
-  return axios.get(`${BASE_URL}/api/flashcard/${flashcardId}`);
+  return axios.get(`/api/flashcard/${flashcardId}`);
 }
 
 // Function to update the flashcards
